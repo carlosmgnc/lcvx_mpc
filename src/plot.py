@@ -163,7 +163,7 @@ class Plots():
 
 
         def shared_traj_plot_properties(ax):
-            ax.set_title("converged trajectory")
+            ax.set_title("mpc trajectory")
             ax.scatter(0, 0, 0, color="green", s=10)
             ax.set_xlabel("y")
             ax.set_ylabel("z")

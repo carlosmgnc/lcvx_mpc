@@ -17,8 +17,8 @@ class Params():
         self.alpha = 0.0007
 
         # initial trajectory guess
-        self.ri = np.array([[4000], [600], [800]])
-        self.vi = np.array([[-60], [-20], [-10]])
+        self.ri = np.array([[4000], [600], [1000]])
+        self.vi = np.array([[-60], [-20], [-20]])
         self.vf = np.array([[0], [0], [0]])
         self.qi = np.array([[1],[0],[0],[0]])
         #self.qi = np.array([ [0.9887711], [0], [0.1056687], [0.1056687] ])

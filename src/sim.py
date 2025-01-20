@@ -18,7 +18,7 @@ class simulation:
 
         self.nt, x1, self.u1 = self.opt.opt_min_time()
         self.nsim = self.nt
-        self.nsim = 65
+        self.nsim = 60
 
         self.u = np.zeros((3, self.nsim))
 
@@ -52,8 +52,9 @@ class simulation:
                 self.opt.y0 = np.vstack([self.opt.ri, self.opt.vi, self.opt.z_init])
 
                 print("step: " + str(i))
-                #mpc step
-                nt_opt = nt_opt - 1
+                
+                # mpc step
+                nt_opt = nt_opt - 2
                 if nt_opt < 3:
                     nt_opt = 3
 
@@ -63,15 +64,17 @@ class simulation:
                         self.u[:, [i]] = u_opt[:-1, [0]] * np.exp(x_opt[-1, [0]])
 
                         self.u[:, [i]] = self.sixdof.controller(self.trajectory[7:11, i], self.u[:, i], self.trajectory[11:14, [i]])
+                        if np.linalg.norm(self.trajectory[1:4, [i]]) <= 100:
+                            v = np.linalg.norm(self.u[:, i]) * np.array([[1], [0], [0]] )
+                            self.u[:, [i]] = self.sixdof.controller(self.trajectory[7:11, i], v, self.trajectory[11:14, [i]])
                         break
                     else:
-                        self.u[:, [i]] = np.zeros((3, 1))#self.u[:, [i-1]]
+                        self.u[:, [i]] = np.zeros((3, 1))
                         nt_opt = nt_opt + 1
 
-                #self.u[:, [i]] = np.array([[1000],[2000],[500]])
-                # self.u[:, [i]] = self.sixdof.controller(self.trajectory[7:11, i], np.array([[self.params.Tmax], [0], [0]]), self.trajectory[11:14, [i]])
-                
 
+
+            #integrate 
             for j in range(0, nsub + 1):
                 sub_time = i * self.opt.dt + j * dt_sub
                 print(self.u[:, [i]])
@@ -86,12 +89,5 @@ sim = simulation(sixdof, params)
 
 sim.integrate_full_trajectory()
 
-
-plt.figure()
-t_list = range(0, sim.nsim)
-for i in range(1, 4):
-    plt.plot(t_list, sim.trajectory[i, :sim.nsim])
-
-# print("final position: " + str(sim.trajectory[1:4, 0]))
+print("final position: " + str(sim.trajectory[1:4, 0]))
 plotter.plot(sim, sim.trajectory, sixdof)
-
