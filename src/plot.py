@@ -90,7 +90,7 @@ class Plots():
         # fig_traj_plot.subplots_adjust(left=0.1, right=0.9, top=0.95, bottom=0.05)
         fig_traj_plot.tight_layout()
         ax = plt.axes(projection="3d")
-        ax.view_init(elev=25, azim=161)
+        ax.view_init(elev=13, azim=-56)
 
         #ax.view_init(elev=0, azim=90)
         ax.plot3D(x[2, :], x[3, :], x[1, :])
@@ -110,10 +110,10 @@ class Plots():
 
         rt_I = np.zeros((3, sim.nsim))
         for i in range(sim.nsim):
-            rt_I[:, [i]] = 10* self.DCM_output(x[7:11, i]).T @ sixdof.params.rt
+            rt_I[:, [i]] = 20* self.DCM_output(x[7:11, i]).T @ sixdof.params.rt
 
         thrust_vecs = np.empty((3, sim.nsim))
-        qlen = 0.04
+        qlen = 0.08
 
         for i in range(rt_I.shape[1]):
             thrust_vecs[:, [i]] = self.DCM_output(x[7:11, i]).T @ u[:, [i]]
@@ -124,7 +124,7 @@ class Plots():
         base_y = x[2, :] - q[1, :]
         base_z = x[3, :] - q[2, :]
 
-        skip = 1
+        skip = 4
         ax.quiver(
             base_y[::skip],
             base_z[::skip],
@@ -163,7 +163,7 @@ class Plots():
 
 
         def shared_traj_plot_properties(ax):
-            ax.set_title("mpc trajectory")
+            ax.set_title("mpc test trajectory")
             ax.scatter(0, 0, 0, color="green", s=10)
             ax.set_xlabel("y")
             ax.set_ylabel("z")
@@ -177,7 +177,7 @@ class Plots():
         fig_anim = plt.figure(8, figsize=(8, 8))
         fig_anim.tight_layout()
         ax_anim = plt.axes(projection="3d")
-        ax_anim.view_init(elev=25, azim=161)
+        ax_anim.view_init(elev=13, azim=-56)
         ax_anim.plot3D(x[2, :], x[3, :], x[1, :], linestyle="--", linewidth=0.5, color="black")
 
         shared_traj_plot_properties(ax_anim)
@@ -246,10 +246,10 @@ class Plots():
 
         fig_names = ["position", "mass", "control", "throttle", "virtual_control", "tof_iteration", "trajectory", "animation"]
 
-        # for i in range(1, 8):
-        #     plt.figure(i).savefig("../images/" + fig_names[i - 1] + ".png", dpi=300)
+        for i in range(1, 8):
+            plt.figure(i).savefig("../images/" + fig_names[i - 1] + ".png", dpi=300)
 
-        # animation.save("../images/animation.gif", writer="pillow", fps=1000 / anim_int)
+        animation.save("../images/animation.gif", writer="pillow", fps=1000 / anim_int)
 
         plt.show(block=False)
         plt.pause(1)

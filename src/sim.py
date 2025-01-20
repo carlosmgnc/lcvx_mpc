@@ -64,7 +64,7 @@ class simulation:
                         self.u[:, [i]] = u_opt[:-1, [0]] * np.exp(x_opt[-1, [0]])
 
                         self.u[:, [i]] = self.sixdof.controller(self.trajectory[7:11, i], self.u[:, i], self.trajectory[11:14, [i]])
-                        if np.linalg.norm(self.trajectory[1:4, [i]]) <= 100:
+                        if np.linalg.norm(self.trajectory[1:4, [i]]) <= 200:
                             v = np.linalg.norm(self.u[:, i]) * np.array([[1], [0], [0]] )
                             self.u[:, [i]] = self.sixdof.controller(self.trajectory[7:11, i], v, self.trajectory[11:14, [i]])
                         break
