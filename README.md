@@ -6,4 +6,5 @@
 
 <div style="text-align: center;">
   <img src="images/position.png" alt="trajectory" width="400" />
+  <img src="images/control.png" alt="trajectory" width="400" />
 </div>
